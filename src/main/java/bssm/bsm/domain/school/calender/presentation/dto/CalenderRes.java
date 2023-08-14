@@ -1,7 +1,7 @@
 package bssm.bsm.domain.school.calender.presentation.dto;
 
-import bssm.bsm.domain.school.calender.domain.Class;
 import bssm.bsm.domain.school.calender.domain.Date;
+import bssm.bsm.domain.school.calender.domain.Class;
 import lombok.Getter;
 
 @Getter

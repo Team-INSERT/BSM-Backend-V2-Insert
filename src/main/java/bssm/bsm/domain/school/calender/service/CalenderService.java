@@ -3,7 +3,6 @@ package bssm.bsm.domain.school.calender.service;
 import bssm.bsm.domain.school.calender.domain.Calender;
 import bssm.bsm.domain.school.calender.domain.CalenderRepository;
 import bssm.bsm.domain.school.calender.domain.Class;
-import bssm.bsm.domain.school.calender.domain.Date;
 import bssm.bsm.domain.school.calender.presentation.dto.CalenderReq;
 import bssm.bsm.domain.school.calender.presentation.dto.CalenderRes;
 import bssm.bsm.domain.user.domain.Student;
