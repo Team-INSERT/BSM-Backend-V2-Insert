@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Class {
+public class Classm {
     @Column(columnDefinition = "INT(1) UNSIGNED")
     private int classNo;
 

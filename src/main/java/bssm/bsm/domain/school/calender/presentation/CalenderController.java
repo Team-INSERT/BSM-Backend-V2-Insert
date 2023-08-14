@@ -1,6 +1,6 @@
 package bssm.bsm.domain.school.calender.presentation;
 
-import bssm.bsm.domain.school.calender.domain.Class;
+import bssm.bsm.domain.school.calender.domain.Classm;
 import bssm.bsm.domain.school.calender.presentation.dto.CalenderReq;
 import bssm.bsm.domain.school.calender.presentation.dto.CalenderRes;
 import bssm.bsm.domain.school.calender.service.CalenderService;
@@ -28,7 +28,7 @@ public class CalenderController {
 
     @GetMapping("/read/{grade}/{classNumber}/{month}")
     public ResponseEntity<List<List<CalenderRes>>> read(@PathVariable int grade, @PathVariable int classNumber, @PathVariable int month) {
-        List<List<CalenderRes>> read = calenderService.read(new Class(classNumber, grade), month);
+        List<List<CalenderRes>> read = calenderService.read(new Classm(classNumber, grade), month);
 
         return ResponseEntity.ok().body(read);
     }
