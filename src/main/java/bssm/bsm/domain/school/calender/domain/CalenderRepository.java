@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CalenderRepository extends JpaRepository<Calender, Long> {
 
-    @Query("select c from Calender c where c.classInfo.grade = :grade and c.classInfo.classNo = :classNo and c.date.month = :month order by c.date.day")
+    @Query("select c from Calender c where c.classmInfo.grade = :grade and c.classmInfo.classNo = :classNo and c.date.month = :month order by c.date.day")
     List<Calender> findByClassInfoAndDate(@Param("grade") int grade, @Param("classNo") int classNo, @Param("month") int month);
 }
