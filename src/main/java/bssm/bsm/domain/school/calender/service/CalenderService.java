@@ -2,7 +2,7 @@ package bssm.bsm.domain.school.calender.service;
 
 import bssm.bsm.domain.school.calender.domain.Calender;
 import bssm.bsm.domain.school.calender.domain.CalenderRepository;
-import bssm.bsm.domain.school.calender.domain.Class;
+import bssm.bsm.domain.school.calender.domain.Classm;
 import bssm.bsm.domain.school.calender.presentation.dto.CalenderReq;
 import bssm.bsm.domain.school.calender.presentation.dto.CalenderRes;
 import bssm.bsm.domain.user.domain.Student;
@@ -29,7 +29,7 @@ public class CalenderService {
 
     @Transactional
     public void create(CalenderReq calenderReq, User user) {
-        isSameClass(new Class(calenderReq.getClassNo(), calenderReq.getGrade()), user);
+        isSameClass(new Classm(calenderReq.getClassNo(), calenderReq.getGrade()), user);
 
         calenderRepository.save(
                 Calender.builder()
@@ -45,15 +45,15 @@ public class CalenderService {
     }
 
     @Transactional(readOnly = true)
-    public List<List<CalenderRes>> read(Class classInfo, int month) {
-        List<Calender> byClassInfoAndDate = calenderRepository.findByClassInfoAndDate(classInfo.getGrade(), classInfo.getClassNo(), month);
+    public List<List<CalenderRes>> read(Classm classmInfo, int month) {
+        List<Calender> byClassInfoAndDate = calenderRepository.findByClassInfoAndDate(classmInfo.getGrade(), classmInfo.getClassNo(), month);
 
         return groupByDay(byClassInfoAndDate);
     }
 
     @Transactional
     public void update(CalenderReq calenderReq, User user, Long calenderId) {
-        isSameClass(new Class(calenderReq.getClassNo(), calenderReq.getGrade()), user);
+        isSameClass(new Classm(calenderReq.getClassNo(), calenderReq.getGrade()), user);
 
         Calender calender = calenderRepository.findById(calenderId)
                 .orElseThrow(() -> new NotFoundException("Can't Found Updatable Calender"));
@@ -66,16 +66,16 @@ public class CalenderService {
         Calender calender = calenderRepository.findById(calenderId)
                 .orElseThrow(() -> new NotFoundException("Calender Not Found"));
 
-        isSameClass(calender.getClassInfo(), user);
+        isSameClass(calender.getClassmInfo(), user);
 
         calenderRepository.delete(calender);
     }
 
-    private void isSameClass(Class classInfo, User user) {
+    private void isSameClass(Classm classmInfo, User user) {
         Student userStudent = studentRepository.findById(user.getStudentId())
                 .orElseThrow(() -> new NotFoundException("User Not Found Validating Class"));
 
-        if (classInfo.getGrade() != userStudent.getGrade() || classInfo.getClassNo() != userStudent.getClassNo()) {
+        if (classmInfo.getGrade() != userStudent.getGrade() || classmInfo.getClassNo() != userStudent.getClassNo()) {
             throw new ForbiddenException("Can't Fix Another Class");
         }
     }

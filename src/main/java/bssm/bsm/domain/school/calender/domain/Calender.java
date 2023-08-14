@@ -16,7 +16,7 @@ public class Calender {
     private Long id;
 
     @Embedded
-    private Class classInfo;
+    private Classm classmInfo;
 
     @Embedded
     private Date date;
@@ -30,7 +30,7 @@ public class Calender {
 
     @Builder
     public Calender(int classNo, int grade, int month, int day, String title, String content, String color) {
-        this.classInfo = new Class(classNo, grade);
+        this.classmInfo = new Classm(classNo, grade);
         this.title = title;
         this.date = new Date(month, day);
         this.content = content;
@@ -49,8 +49,8 @@ public class Calender {
                 id,
                 date.getMonth(),
                 date.getDay(),
-                classInfo.getClassNo(),
-                classInfo.getGrade(),
+                classmInfo.getClassNo(),
+                classmInfo.getGrade(),
                 title,
                 content,
                 color);
