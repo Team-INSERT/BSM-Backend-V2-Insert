@@ -4,9 +4,16 @@ import bssm.bsm.domain.board.board.domain.Board;
 import bssm.bsm.domain.board.category.domain.PostCategory;
 import bssm.bsm.domain.board.category.service.CategoryProvider;
 import bssm.bsm.domain.board.post.domain.Post;
+import bssm.bsm.global.utils.SortToOrderSp;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
@@ -20,20 +27,30 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private final CategoryProvider categoryProvider;
 
     @Override
-    public List<Post> findPostList(Board board, Long startPostId, int limit, String category) {
-        return jpaQueryFactory.selectFrom(post)
-                .join(post.writer, user)
+    public Page<Post> findPostList(Board board, String category, Pageable pageable) {
+
+        List<Post> result = jpaQueryFactory.selectFrom(post)
+                 .join(post.writer, user)
+                 .where(
+                         post.delete.isFalse(),
+                         post.board.eq(board),
+                         categoryEq(board,category)
+                 )
+                 .offset(pageable.getOffset())
+                 .limit(pageable.getPageSize())
+                 .orderBy(SortToOrderSp.getOrderSpecifier(pageable.getSort()).stream().toArray(OrderSpecifier[]::new))
+                 .fetch();
+
+        JPAQuery<Long> count = jpaQueryFactory.select(post.count())
+                .from(post)
                 .where(
                         post.delete.isFalse(),
                         post.board.eq(board),
-                        categoryEq(board, category),
-                        postIdLt(startPostId)
-                )
-                .limit(limit)
-                .orderBy(
-                        post.pk.id.desc()
-                )
-                .fetch();
+                        categoryEq(board,category)
+                );
+
+        return PageableExecutionUtils.getPage(result, pageable, count::fetchOne);
+
     }
 
     private BooleanExpression categoryEq(Board board, String category) {

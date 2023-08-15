@@ -3,6 +3,7 @@ package bssm.bsm.domain.board.post.presentation.dto.res;
 import bssm.bsm.domain.board.post.domain.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -11,16 +12,14 @@ import java.util.List;
 public class PostListRes {
 
     List<PostRes> postList;
-    int limit;
 
-    public static PostListRes create(List<Post> postList, int limit) {
+    public static PostListRes create(Page<Post> postList) {
         List<PostRes> postResList = postList.stream()
                 .map(PostRes::create)
                 .toList();
 
         PostListRes postListRes = new PostListRes();
         postListRes.postList = postResList;
-        postListRes.limit = limit;
         return postListRes;
     }
 }

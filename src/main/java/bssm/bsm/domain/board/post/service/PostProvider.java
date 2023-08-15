@@ -6,10 +6,10 @@ import bssm.bsm.domain.board.post.domain.PostPk;
 import bssm.bsm.domain.board.post.exception.NoSuchPostException;
 import bssm.bsm.domain.board.post.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,12 +26,12 @@ public class PostProvider {
         return postRepository.countByBoard(board) + 1;
     }
 
-    public List<Post> findRecentPostList(Board board, int limit, String category) {
-        return postRepository.findPostList(board, null, limit, category);
+    public Page<Post> findRecentPostList(Board board, String category, Pageable pageable) {
+        return postRepository.findPostList(board, category, pageable);
     }
 
-    public List<Post> findPostListByCursor(Board board, long startPostId, int limit, String category) {
-        return postRepository.findPostList(board, startPostId, limit, category);
+    public Page<Post> findPostListByCursor(Board board, String category, Pageable pageable) {
+        return postRepository.findPostList(board, category, pageable);
     }
 
 }

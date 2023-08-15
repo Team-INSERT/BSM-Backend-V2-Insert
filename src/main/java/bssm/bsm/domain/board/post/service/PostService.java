@@ -21,6 +21,7 @@ import bssm.bsm.domain.board.category.service.CategoryProvider;
 import bssm.bsm.domain.user.domain.User;
 import bssm.bsm.global.error.exceptions.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -45,17 +46,19 @@ public class PostService {
         Board board = boardProvider.findBoard(req.getBoardId());
         checkViewPermission(board, nullableUser);
 
-        List<Post> postList = postProvider.findPostListByCursor(board, req.getStartPostId(), req.getLimit(), req.getCategory());
-        return PostListRes.create(postList, req.getLimit());
+        Page<Post> postList = postProvider.findPostListByCursor(board, req.getCategory(),req.getPageable());
+        return PostListRes.create(postList);
     }
 
-    public PostListRes findRecentPostList(User nullableUser, @Valid FindRecentPostListReq req) {
+    public Page<Post> findRecentPostList(User nullableUser, @Valid FindRecentPostListReq req) {
         Board board = boardProvider.findBoard(req.getBoardId());
         checkViewPermission(board, nullableUser);
 
-        List<Post> postList = postProvider.findRecentPostList(board, req.getLimit(), req.getCategory());
-        return PostListRes.create(postList, req.getLimit());
+        Page<Post> postList = postProvider.findRecentPostList(board, req.getCategory(),req.getPageable());
+//        return PostListRes.create(postList);
+        return postList;
     }
+
 
     @Transactional
     public DetailPostRes findPost(User nullableUser, @Valid FindPostReq req) {
